@@ -146,3 +146,25 @@ func deleteMovie(w http.ResponseWriter, id int) {
 
 	http.Error(w, "Movie not found", http.StatusNotFound)
 }
+
+func MovieRouter(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/movie/")
+	parts := strings.Split(path, "/")
+
+	if len(parts) == 1 {
+		MovieByID(w, r)
+		return
+	}
+
+	if len(parts) == 2 && parts[1] == "review" {
+		CreateReview(w, r)
+		return
+	}
+
+	if len(parts) == 2 && parts[1] == "reviews" {
+		GetReviewsByMovie(w, r)
+		return
+	}
+
+	http.NotFound(w, r)
+}
